@@ -190,6 +190,8 @@ public class DashboardProductsService {
             }
         }
 
+        
+/*
         // Filling remaining slots if not filled
         if (similarProducts.size() < 6) {
             similarProducts.addAll(
@@ -211,7 +213,7 @@ public class DashboardProductsService {
                             .limit(6 - similarProducts.size())
                             .toList()
             );
-        }
+        }*/
         //returning exactly 6 unique products
         log.debug("Returning final list of similar products...");
         return similarProducts.stream()
@@ -219,4 +221,154 @@ public class DashboardProductsService {
                 .limit(6)
                 .collect(Collectors.toList());
     }
+    /*
+
+    public List<ProductDetailsDTO> getSimilarProducts(List<String> lastViewedProductIds) {
+        log.info("Fetching similar products based on last viewed products: {}", lastViewedProductIds);
+
+        // Fetch all view counts
+        Map<String, ProductViewCount> allViewCounts = getAllViewCounts();
+
+        // Get the categories of the last viewed products
+        List<String> categoryOrder = getCategoryOrder(lastViewedProductIds, allViewCounts);
+
+        // Set to track already added products
+        Set<String> addedProducts = new HashSet<>();
+        List<ProductDetailsDTO> similarProducts = new ArrayList<>();
+
+        // Fetch similar products
+        fetchSimilarProducts(categoryOrder, allViewCounts, lastViewedProductIds, addedProducts, similarProducts);
+
+        // Add more products if there are less than 6 similar products
+        if (similarProducts.size() < 6) {
+            log.debug("Adding more similar products to meet the limit...");
+            addMoreSimilarProducts(categoryOrder, allViewCounts, lastViewedProductIds, addedProducts, similarProducts);
+        }
+
+        // Fill remaining slots if not filled
+        if (similarProducts.size() < 6) {
+            fillRemainingSlots(allViewCounts, lastViewedProductIds, addedProducts, similarProducts);
+        }
+
+        // Return the final list of 6 unique products
+        log.debug("Returning final list of similar products...");
+        return getFinalListOfProducts(similarProducts);
+    }
+
+    private Map<String, ProductViewCount> getAllViewCounts() {
+        Map<String, ProductViewCount> allViewCounts = new HashMap<>();
+        KeyValueIterator<String, ProductViewCount> viewCountIterator = viewCountStore.all();
+
+        while (viewCountIterator.hasNext()) {
+            KeyValue<String, ProductViewCount> entry = viewCountIterator.next();
+            allViewCounts.put(entry.key, entry.value);
+        }
+
+        return allViewCounts;
+    }
+
+    private List<String> getCategoryOrder(List<String> lastViewedProductIds, Map<String, ProductViewCount> allViewCounts) {
+        return lastViewedProductIds.stream()
+                .map(productId -> {
+                    ProductViewCount productViewCount = allViewCounts.get(productId);
+                    return (productViewCount != null) ? productViewCount.getCategoryId().toString() : null;
+                })
+                .filter(Objects::nonNull)
+                .toList();
+    }
+
+    private void fetchSimilarProducts(List<String> categoryOrder, Map<String, ProductViewCount> allViewCounts,
+                                      List<String> lastViewedProductIds, Set<String> addedProducts,
+                                      List<ProductDetailsDTO> similarProducts) {
+        log.debug("Fetching similar products...");
+        for (String categoryId : categoryOrder) {
+            similarProducts.addAll(
+                    allViewCounts.entrySet().stream()
+                            .filter(entry -> entry.getValue() != null
+                                    && entry.getValue().getCategoryId().toString().equals(categoryId)
+                                    && !addedProducts.contains(entry.getKey())
+                                    && !lastViewedProductIds.contains(entry.getKey()))
+                            .sorted((e1, e2) -> Long.compare(e2.getValue().getViewCount(), e1.getValue().getViewCount()))
+                            .map(entry -> {
+                                String productId = entry.getKey();
+                                ProductDetails product = productStore.get(productId);
+                                if (product != null) {
+                                    ProductDetailsDTO dto = ProductDataMapper.avroToDto(productId, entry.getValue().getViewCount(), product);
+                                    addedProducts.add(productId);
+                                    return dto;
+                                }
+                                return null;
+                            })
+                            .filter(Objects::nonNull)
+                            .limit(1)
+                            .toList()
+            );
+        }
+    }
+
+    private void addMoreSimilarProducts(List<String> categoryOrder, Map<String, ProductViewCount> allViewCounts,
+                                        List<String> lastViewedProductIds, Set<String> addedProducts,
+                                        List<ProductDetailsDTO> similarProducts) {
+        for (String categoryId : categoryOrder) {
+            similarProducts.addAll(
+                    allViewCounts.entrySet().stream()
+                            .filter(entry -> entry.getValue() != null
+                                    && entry.getValue().getCategoryId().toString().equals(categoryId)
+                                    && !addedProducts.contains(entry.getKey())
+                                    && !lastViewedProductIds.contains(entry.getKey()))
+                            .sorted((e1, e2) -> Long.compare(e2.getValue().getViewCount(), e1.getValue().getViewCount()))
+                            .map(entry -> {
+                                String productId = entry.getKey();
+                                ProductDetails product = productStore.get(productId);
+                                if (product != null) {
+                                    ProductDetailsDTO dto = ProductDataMapper.avroToDto(productId, entry.getValue().getViewCount(), product);
+                                    addedProducts.add(productId);
+                                    return dto;
+                                }
+                                return null;
+                            })
+                            .filter(Objects::nonNull)
+                            .limit(6 - similarProducts.size())
+                            .toList()
+            );
+
+            if (similarProducts.size() >= 6) {
+                break;
+            }
+        }
+    }
+
+    private void fillRemainingSlots(Map<String, ProductViewCount> allViewCounts, List<String> lastViewedProductIds,
+                                    Set<String> addedProducts, List<ProductDetailsDTO> similarProducts) {
+        if (similarProducts.size() < 6) {
+            similarProducts.addAll(
+                    allViewCounts.entrySet().stream()
+                            .filter(entry -> !lastViewedProductIds.contains(entry.getKey())
+                                    && !addedProducts.contains(entry.getKey()))
+                            .sorted((e1, e2) -> Long.compare(e2.getValue().getViewCount(), e1.getValue().getViewCount()))
+                            .map(entry -> {
+                                String productId = entry.getKey();
+                                ProductDetails product = productStore.get(productId);
+                                if (product != null) {
+                                    ProductDetailsDTO dto = ProductDataMapper.avroToDto(productId, entry.getValue().getViewCount(), product);
+                                    addedProducts.add(productId);
+                                    return dto;
+                                }
+                                return null;
+                            })
+                            .filter(Objects::nonNull)
+                            .limit(6 - similarProducts.size())
+                            .toList()
+            );
+        }
+    }
+
+    private List<ProductDetailsDTO> getFinalListOfProducts(List<ProductDetailsDTO> similarProducts) {
+        return similarProducts.stream()
+                .distinct()
+                .limit(6)
+                .collect(Collectors.toList());
+    }
+}
+*/
 }
