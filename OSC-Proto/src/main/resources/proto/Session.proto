@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option java_package = "com.in.proto.session";
+option java_multiple_files = true;
+
+service SessionService {
+  rpc CreateSession (CreateSessionRequest) returns (CreateSessionResponse);
+  rpc ValidateSession(SessionValidationRequest) returns (SessionValidationResponse);
+  rpc getSessionDetails(SessionDetailsRequest) returns (SessionDetailsResponse);
+  rpc isSessionLogout(SessionLogoutRequest) returns (SessionLogoutResponse);
+
+}
+
+message CreateSessionRequest {
+  string userId = 1;
+  string loginDeviceType = 2;
+  string sessionId = 3;
+}
+
+message CreateSessionResponse {
+  bool success = 1;
+}
+
+message SessionValidationRequest {
+  string userId = 1;
+  string sessionId = 2;
+}
+
+message SessionValidationResponse {
+  bool success = 1;
+}
+
+message SessionDetailsRequest {
+  string sessionId = 1;
+}
+message SessionDetailsResponse {
+  string userId = 2;
+  string loginDeviceType = 3;
+}
+
+message SessionLogoutRequest {
+  string userId = 1;
+  string sessionId = 2;
+}
+message SessionLogoutResponse {
+  bool success = 1;
+}
+
+

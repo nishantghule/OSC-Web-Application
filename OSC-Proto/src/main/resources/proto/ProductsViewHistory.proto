@@ -1,0 +1,23 @@
+syntax = "proto3";
+option java_package = "com.in.proto.product";
+option java_multiple_files = true;
+
+service ProductsViewHistory{
+  rpc fetchRecentlyViewedHistory(RecentlyViewedProductsRequest) returns (RecentlyViewedProductsResponse);
+  rpc updateRecentlyViewedProducts(UpdateRecentlyViewedProductsRequest) returns (UpdateRecentViewedProductsResponse);
+}
+
+message RecentlyViewedProductsRequest {
+  string userId = 1;  // The user making the request
+}
+
+message RecentlyViewedProductsResponse {
+  repeated string productIds = 1;  // List of product IDs recently viewed by the user}
+}
+message UpdateRecentlyViewedProductsRequest {
+  string userId = 1;
+  string productId = 2;
+}
+message UpdateRecentViewedProductsResponse {
+  bool success = 1;
+}

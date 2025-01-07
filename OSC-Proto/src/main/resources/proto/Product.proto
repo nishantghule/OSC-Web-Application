@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+option java_package = "com.in.proto.product";
+option java_multiple_files = true;
+
+service DashboardProducts {
+  rpc FetchDashboardProducts(DashboardRequest) returns (DashboardResponse);
+  rpc fetchProductDetails(ProductDataRequest) returns (ProductDataResponse);
+  rpc filterProducts(FilterProductsRequest) returns (FilterProductsResponse);
+  rpc getProductDetails(GetProductDetailsRequest) returns (GetProductDetailsResponse);
+}
+message DashboardRequest {
+  repeated string productId = 1;  // List of product IDs to fetch details
+}
+message Product {
+  string productId = 1;  // Product ID
+  string categoryId = 2;  // Category ID the product belongs to
+  string productName = 3;        // Product name
+  string productDetails = 4;  // Detailed description of the product
+  double productPrice = 5;        // Price of the product
+  string imagePath = 6;       // URL of the product image
+}
+
+message Category {
+  string categoryId = 1;  // Category ID
+  string categoryName = 2;  // Category name
+  string imagePath = 3;  // Description of the category
+}
+
+message DashboardDetails {
+  repeated Product featuredProducts = 1;        // List of featured products
+  repeated Product recentlyViewedProducts = 2;  // List of recently viewed products
+  repeated Product similarProducts = 3;         // List of similar products
+  repeated Category categories = 4;             // List of categories
+}
+
+message DashboardResponse {
+  DashboardDetails dashboardDetails = 1;  // The dashboard details to return to the user
+}
+
+message ProductDataRequest {
+  string userId = 1;
+  string productId = 2;// The ID of the product to fetch
+  string categoryId = 3;
+}
+
+message ProductDataResponse {
+  ProductData product = 1;  // Product details
+  repeated ProductData products = 2;  // List of similar products
+}
+
+message ProductData {
+  string productId = 1;   // Product ID
+  string categoryId = 2;  // Category ID the product belongs to
+  string productName = 3;        // Product name
+  string productDetails = 4;  // Detailed description of the product
+  double productPrice = 5;        // Price of the product
+}
+message FilterProductsRequest {
+  string catId = 1;
+  string filter = 2;
+}
+message FilterProductsResponse {
+  repeated Product filteredProducts = 1;
+}
+message GetProductDetailsRequest {
+  repeated string productIds = 1;  // List of product IDs to fetch details for
+}
+message GetProductDetailsResponse {
+  repeated Product products = 1;
+}

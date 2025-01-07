@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "SessionValue",
+  "namespace": "com.in.kafka.avro",
+  "fields": [
+    {
+      "name": "sessionId",
+      "type": "string"
+    }
+  ]
+}

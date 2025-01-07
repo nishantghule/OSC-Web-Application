@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{ISO8601}] (%c) - %p %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="error">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+        <Logger name="org.apache.kafka.clients" level="warn" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Logger>
+        <Logger name="com.in" level="error" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Logger>
+    </Loggers>
+</Configuration>

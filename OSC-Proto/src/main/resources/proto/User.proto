@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+option java_package = "com.in.proto.user";
+option java_multiple_files = true;
+
+service UserDataService {
+  rpc SaveUserDetails(UserRegistrationRequest) returns (UserRegistrationResponse);
+  rpc CheckEmailExists(UserEmailRequest) returns (UserEmailResponse);
+  rpc VerifyCredentials(UserCredentialRequest) returns (UserCredentialResponse);
+//  rpc VerifyEmailForPasswordReset(EmailVerificationRequest) returns (EmailVerificationResponse);
+  rpc UpdatePassword(PasswordUpdateRequest) returns (PasswordUpdateResponse);
+}
+message UserRegistrationRequest {
+  string userId = 1;
+  string name = 2;
+  string email = 3;
+  string contact = 4;
+  string dateOfBirth = 5;
+  string password = 6;
+}
+
+message UserRegistrationResponse {
+  bool success = 1;
+}
+
+message UserEmailRequest {
+  string email = 1;
+}
+
+message UserEmailResponse {
+  bool exists = 1;
+}
+
+message UserCredentialRequest {
+  string userId = 1;
+}
+
+message UserCredentialResponse {
+  string userId = 1;
+  string name = 2;
+  string password = 3;
+}
+/*
+message EmailVerificationRequest {
+  string email = 1;
+}
+
+message EmailVerificationResponse {
+  bool exists = 1;
+}*/
+
+message PasswordUpdateRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message PasswordUpdateResponse {
+  bool success = 1;
+}
+
+

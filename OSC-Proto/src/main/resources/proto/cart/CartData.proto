@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.in.proto.cart";
+import "google/protobuf/empty.proto";
+
+service CartDataService {
+  rpc addProductToCart (CartProductDataRequest) returns(google.protobuf.Empty);
+  rpc decreaseCartProductQuantity (CartProductDataRequest) returns(google.protobuf.Empty);
+  rpc removeProductFromCart(RemoveProductDataRequest) returns (google.protobuf.Empty);
+  rpc fetchProductsOfCart(ViewCartProductRequest) returns (ViewCartProductResponse);
+  rpc saveCartProductsToDB(ViewCartProductRequest) returns (google.protobuf.Empty);
+}
+message CartProductDataRequest {
+  string userId = 1;
+  string productId = 2;
+  int32 quantity = 3;
+}
+message RemoveProductDataRequest {
+  string userId = 1;
+  string productId = 2;
+}
+
+message ViewCartProductRequest {
+  string userId = 1;
+}
+
+message CartProduct {
+  string productId = 1;
+  string categoryId = 2;
+  string productName = 3;
+  string productDescription = 4;
+  double productPrice = 5;
+  string imagePath = 6;
+  int32 quantity = 7;
+}
+
+message ViewCartProductResponse {
+  repeated CartProduct cartProducts = 1;
+}
+
+

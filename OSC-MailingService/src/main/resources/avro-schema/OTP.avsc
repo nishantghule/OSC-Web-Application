@@ -1,0 +1,23 @@
+{
+  "type": "record",
+  "name": "Otp",
+  "namespace": "com.in.kafka.avro",
+  "fields": [
+    {
+      "name": "otp",
+      "type": "string"
+    },
+    {
+      "name": "email",
+      "type": "string"
+    },
+    {
+      "name": "failedAttempts",
+      "type": "int"
+    },
+    {
+      "name": "OtpType",
+      "type": "string"
+    }
+  ]
+}
