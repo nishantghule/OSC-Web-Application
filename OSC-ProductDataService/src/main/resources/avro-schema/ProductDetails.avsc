@@ -1,0 +1,35 @@
+{
+  "type": "record",
+  "name": "ProductDetails",
+  "namespace": "com.in.kafka.avro.product",
+  "fields": [
+    /*{
+      "name": "productId",
+      "type": "string"
+    },*/
+    {
+      "name": "categoryId",
+      "type": "string"
+    },
+    {
+      "name": "productName",
+      "type": "string"
+    },
+    {
+      "name": "productPrice",
+      "type": "double"
+    },
+    {
+      "name": "productDescription",
+      "type": "string"
+    },
+    {
+      "name": "date",
+      "type": "string"
+    },
+    {
+      "name": "imagePath",
+      "type": "string"
+    }
+  ]
+}

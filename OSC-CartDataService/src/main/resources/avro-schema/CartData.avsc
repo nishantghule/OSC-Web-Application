@@ -1,0 +1,29 @@
+{
+  "type": "record",
+  "name": "CartData",
+  "namespace": "com.in.kafka.avro.cart",
+  "fields": [
+    {
+      "name": "cartProducts",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "CartProduct",
+          "fields": [
+            {
+              "name": "productId",
+              "type": "string"
+            },
+            {
+              "name": "quantity",
+              "type": "int"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
+
+

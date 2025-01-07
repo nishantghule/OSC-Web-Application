@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "CategoryDetails",
+  "namespace": "com.in.kafka.avro.category",
+  "fields": [
+    {
+      "name": "categoryName",
+      "type": "string"
+    },
+    {
+      "name": "imagePath",
+      "type": "string"
+    }
+  ]
+}

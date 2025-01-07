@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "ProductViewCount",
+  "namespace": "com.in.kafka.avro.product",
+  "fields": [
+    {
+      "name": "categoryId",
+      "type": "string"
+    },
+    {
+      "name": "viewCount",
+      "type": "int"
+    }
+  ]
+}

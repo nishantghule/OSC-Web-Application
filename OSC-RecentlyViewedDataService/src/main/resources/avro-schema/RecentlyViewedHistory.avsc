@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "RecentlyViewedHistory",
+  "namespace": "com.in.kafka.avro",
+  "fields": [
+    {
+      "name": "productIds",
+      "type": {
+        "type": "array",
+        "items": "string"
+      }
+    }
+  ]
+}
+

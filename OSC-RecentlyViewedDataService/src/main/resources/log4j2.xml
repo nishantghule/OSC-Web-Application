@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="ERROR">
+    <Appenders>
+        <Console name="stdout" target="SYSTEM_OUT">
+            <!-- Pattern to log the time, logger name, log level, and the log message -->
+            <PatternLayout pattern="[%d] (%c) - %p %m %n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <!-- Root logger with TRACE level to log everything -->
+        <Root level="trace">
+            <AppenderRef ref="stdout"/>
+        </Root>
+
+        <!-- Specific logger for Kafka clients, set to WARN level -->
+        <Logger name="org.apache.kafka.clients" level="warn" additivity="false">
+            <AppenderRef ref="stdout"/>
+        </Logger>
+
+        <!-- Specific logger for the "com.in" package, set to TRACE level -->
+        <Logger name="com.in" level="trace" additivity="false">
+            <AppenderRef ref="stdout"/>
+        </Logger>
+    </Loggers>
+</Configuration>
